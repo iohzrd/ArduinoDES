@@ -95,6 +95,13 @@ public:
 	*/
 	void tripleDecrypt(void* out, void* in, const uint8_t* key);
 
+	/* TODO */
+	void xor_blocks(uint8_t* dst, const uint8_t* src, size_t len);
+	/* TODO */
+	void decrypt_3des_cbc(uint8_t* ciphertext, size_t ciphertext_len, uint8_t* key, uint8_t* iv, uint8_t* plaintext);
+	/* TODO */
+	void encrypt_3des_cbc(uint8_t* plaintext, size_t plaintext_len, uint8_t* key, uint8_t* iv, uint8_t* ciphertext);
+
 	/** \fn DES()
 	* \brief DES constructor
 	*

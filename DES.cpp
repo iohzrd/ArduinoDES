@@ -175,7 +175,7 @@ const uint8_t shiftkeyinv_permtab[] PROGMEM = {
 /******************************************************************************/
 DES::DES() {
 	sprintf((char*)key, "000000000000000000000000\0");
-	byte ar_iv[8] = { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01 };
+	byte ar_iv[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 	memcpy(iv, ar_iv, 8);
 	memcpy(&IVC, ar_iv, 8);
 	arr_pad[0] = 0x01;
@@ -406,6 +406,50 @@ void DES::tripleDecrypt(void* out, void* in, const uint8_t* key) {
 	decrypt(out, in, (uint8_t*)key + 16);
 	encrypt(out, out, (uint8_t*)key + 8);
 	decrypt(out, out, (uint8_t*)key + 0);
+}
+
+/******************************************************************************/
+
+void DES::xor_blocks(uint8_t* dst, const uint8_t* src, size_t len) {
+	for (size_t i = 0; i < len; i++) {
+		dst[i] ^= src[i];
+	}
+}
+
+/******************************************************************************/
+
+void DES::decrypt_3des_cbc(uint8_t* ciphertext, size_t ciphertext_len, uint8_t* key, uint8_t* iv, uint8_t* plaintext) {
+	if (ciphertext_len % 8 != 0) {
+		printf("Error: Ciphertext length must be a multiple of 8 bytes.\n");
+		return;
+	}
+	uint8_t prev_block[8];
+	memcpy(prev_block, iv, 8);
+	for (size_t i = 0; i < ciphertext_len; i += 8) {
+		uint8_t block[8];
+		tripleDecrypt(block, ciphertext + i, key);
+		xor_blocks(block, prev_block, 8);
+		memcpy(plaintext + i, block, 8);
+		memcpy(prev_block, ciphertext + i, 8);
+	}
+}
+
+/******************************************************************************/
+
+void DES::encrypt_3des_cbc(uint8_t* plaintext, size_t plaintext_len, uint8_t* key, uint8_t* iv, uint8_t* ciphertext) {
+	if (plaintext_len % 8 != 0) {
+		printf("Error: Plaintext length must be a multiple of 8 bytes.\n");
+		return;
+	}
+	uint8_t prev_block[8];
+	memcpy(prev_block, iv, 8);
+	for (size_t i = 0; i < plaintext_len; i += 8) {
+		uint8_t block[8];
+		memcpy(block, plaintext + i, 8);
+		xor_blocks(block, prev_block, 8);
+		tripleEncrypt(ciphertext + i, block, key);
+		memcpy(prev_block, ciphertext + i, 8);
+	}
 }
 
 /******************************************************************************/
