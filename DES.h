@@ -128,7 +128,7 @@ public:
 	*/
 	void init(const void* m_key);
 
-	/** \fn void change_key(const char* m_key);
+	/** \fn void change_key(const uint8_t* m_key);
 	* \brief change the key for DEs and 3DES
 	*
 	* This function changes the key variable needed for DES
@@ -149,15 +149,15 @@ public:
 	/** Getter method for IV
 	 *
 	 * This function return the IV
-	 * @param *out byte pointer that gets the IV.
+	 * @param *out uint8_t pointer that gets the IV.
 	 * @return none, the IV is writed to the out pointer.
 	 */
-	void get_IV(byte* out);
+	void get_IV(uint8_t* out);
 
 	/** Getter method for IV
 	 *
 	 * This function return the IV
-	 * @param out byte pointer that gets the IV.
+	 * @param out uint8_t pointer that gets the IV.
 	 * @return none, the IV is writed to the out pointer.
 	 */
 	unsigned long long int get_IV_int();
@@ -177,7 +177,7 @@ public:
 	* @return returns the key
 
 	*/
-	byte* get_key();
+	uint8_t* get_key();
 
 	/** \fn get_size()
 	* \brief getter method for size
@@ -201,74 +201,74 @@ public:
 	* calculates the size of theplaintext with the padding
 	* and the size of the padding needed. Moreover it stores them in their variables.
 	*
-	* \param p_size the size of the byte array ex sizeof(plaintext)
+	* \param p_size the size of the uint8_t array ex sizeof(plaintext)
 	*/
 	void calc_size_n_pad(int p_size);
 
-	/** \fn padPlaintext(void* in,byte* out)
+	/** \fn padPlaintext(void* in, uint8_t* out)
 	* \brief pads the plaintext
 	*
-	* This function pads the plaintext and returns an char array with the
+	* This function pads the plaintext and returns an uint8_t array with the
 	* plaintext and the padding in order for the plaintext to be compatible with
 	* 8bit size blocks required by 3DES
 	*
-	* \param in the string of the plaintext in a byte array
-	* \param out the string of the padded plaintext in a byte array
+	* \param in the string of the plaintext in a uint8_t array
+	* \param out the string of the padded plaintext in a uint8_t array
 	*/
-	void padPlaintext(void* in, byte* out);
+	void padPlaintext(void* in, uint8_t* out);
 
 	/** \fn CheckPad(void* in,int size)
 	* \brief check the if the padding is correct
 	*
 	* This functions checks the padding of the plaintext.
 	*
-	* \param *in the string of the plaintext in a byte array
+	* \param *in the string of the plaintext in a uint8_t array
 	* \param size the size of the string
 	* \return true if correct / false if not
 	*/
-	bool CheckPad(byte* in, int size);
+	bool CheckPad(uint8_t* in, int size);
 
-	/** \fn tdesCbcEncipher(byte* in,byte* out)
+	/** \fn tdesCbcEncipher(uint8_t* in,uint8_t* out)
 	* \brief the main encrypt 3DES with IV function
 	*
 	* This function uses the IV to xor (^) the first block of the string
 	* and encrypts it using tripleEncrypt function
 	*
-	* \param in the string of the plaintext in a byte array
-	* \param out the string of the ciphertext in a byte array
+	* \param in the string of the plaintext in a uint8_t array
+	* \param out the string of the ciphertext in a uint8_t array
 	*/
-	void tdesCbcEncipher(byte* in, byte* out);
+	void tdesCbcEncipher(uint8_t* in, uint8_t* out);
 
-	/** \fn tdesCbcDecipher(byte* in,byte* out)
+	/** \fn tdesCbcDecipher(uint8_t* in,uint8_t* out)
 	* \brief the main decrypt 3DES with IV function
 	*
 	* This function if the reverse of the tdesCbcEncipher function.
 	* used the IV and then the tripleDecrypt
 	*
-	* \param in the string of the ciphertext in a byte array
-	* \param out the string of the plaintext in a byte array
+	* \param in the string of the ciphertext in a uint8_t array
+	* \param out the string of the plaintext in a uint8_t array
 	*/
-	void tdesCbcDecipher(byte* in, byte* out);
+	void tdesCbcDecipher(uint8_t* in, uint8_t* out);
 
-	/** \fn tprintArray(byte output[],bool p_pad = true)
+	/** \fn tprintArray(uint8_t output[],bool p_pad = true)
 	* \brief Prints the array given
 	*
 	* This function prints the given array with size equal \var size
 	* and pad equal \var pad. It is mainlly used for debugging purpuses or to output the string.
 	*
-	* \param output the string of the plaintext in a byte array
+	* \param output the string of the plaintext in a uint8_t array
 	* \param p_pad optional, used to print with out the padding characters
 	*/
-	void printArray(byte output[], bool p_pad = true);
+	void printArray(uint8_t output[], bool p_pad = true);
 
 	/** Prints the array given.
 	 *
 	 * This function prints the given array in Hexadecimal.
 	 *
-	 * @param output[] the string of the text in a byte array
+	 * @param output[] the string of the text in a uint8_t array
 	 * @param sizel the size of the array.
 	 */
-	void printArray(byte output[], int sizel);
+	void printArray(uint8_t output[], int sizel);
 
 	/** User friendly implementation of AES-CBC encryption.
 	 *
@@ -279,7 +279,7 @@ public:
 	 * @param inc optional parameter to automaticaly increase IV
 	 * @note The key will be stored in class variable.
 	 */
-	void do_3des_encrypt(byte* plain, int size_p, byte* cipher, const void* key, bool inc = false);
+	void do_3des_encrypt(uint8_t* plain, int size_p, uint8_t* cipher, const void* key, bool inc = false);
 
 	/** User friendly implementation of AES-CBC decryption.
 	*
@@ -290,7 +290,7 @@ public:
 	* @param ivl the initialization vector IV that will be used for decryption.
 	* @note The key will be stored in class variable.
 	*/
-	void do_3des_decrypt(byte* cipher, int size_c, byte* plain, const void* key, unsigned long long int ivl);
+	void do_3des_decrypt(uint8_t* cipher, int size_c, uint8_t* plain, const void* key, unsigned long long int ivl);
 #if defined(DES_LINUX)
 	/**
 	 * used in linux in order to retrieve the time in milliseconds.
@@ -353,16 +353,16 @@ private:
 	 *
 	 */
 	uint32_t des_f(uint32_t r, uint8_t* kr);
-	byte key[24];/**< holds the key for the encryption */
+	uint8_t key[24];/**< holds the key for the encryption */
 	unsigned long long int IVC;/**< holds the initialization vector counter in numerical format. */
-	byte iv[8];/**< holds the initialization vector that will be used in the cipher. */
+	uint8_t iv[8];/**< holds the initialization vector that will be used in the cipher. */
 	int pad;/**< holds the size of the padding. */
 	int size;/**< hold the size of the plaintext to be ciphered */
 #if defined(DES_LINUX)
 	timeval tv;/**< holds the time value on linux */
 #endif
 
-	byte arr_pad[7];/**< holds the hexadecimal padding values, initialisation in the constructor */
+	uint8_t arr_pad[7];/**< holds the hexadecimal padding values, initialisation in the constructor */
 };
 
 #endif

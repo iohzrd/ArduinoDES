@@ -175,7 +175,7 @@ const uint8_t shiftkeyinv_permtab[] PROGMEM = {
 /******************************************************************************/
 DES::DES() {
 	sprintf((char*)key, "000000000000000000000000\0");
-	byte ar_iv[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
+	uint8_t ar_iv[8] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 };
 	memcpy(iv, ar_iv, 8);
 	memcpy(&IVC, ar_iv, 8);
 	arr_pad[0] = 0x01;
@@ -217,7 +217,7 @@ void DES::set_IV(unsigned long long int IVCl) {
 
 /******************************************************************************/
 
-void DES::get_IV(byte* out) {
+void DES::get_IV(uint8_t* out) {
 	memcpy(out, &IVC, 8);
 }
 
@@ -460,7 +460,7 @@ void DES::iv_inc() {
 }
 /******************************************************************************/
 
-byte* DES::get_key() {
+uint8_t* DES::get_key() {
 	return key;
 }
 
@@ -491,7 +491,7 @@ void DES::calc_size_n_pad(int p_size) {
 
 /******************************************************************************/
 
-void DES::padPlaintext(void* in, byte* out)
+void DES::padPlaintext(void* in, uint8_t* out)
 {
 	memcpy(out, in, size);
 	for (int i = size - pad; i < size; i++) {
@@ -502,7 +502,7 @@ void DES::padPlaintext(void* in, byte* out)
 
 /******************************************************************************/
 
-bool DES::CheckPad(byte* in, int lsize) {
+bool DES::CheckPad(uint8_t* in, int lsize) {
 	if (in[lsize - 1] <= 0x08) {
 		int lpad = (int)in[lsize - 1];
 		for (int i = lsize - 1; i >= lsize - lpad; i--) {
@@ -517,7 +517,7 @@ bool DES::CheckPad(byte* in, int lsize) {
 }
 /******************************************************************************/
 
-void DES::tdesCbcEncipher(byte* in, byte* out)
+void DES::tdesCbcEncipher(uint8_t* in, uint8_t* out)
 {
 #if defined(DES_PRINT)
 	printf_P(PSTR("\n"));
@@ -549,7 +549,7 @@ void DES::tdesCbcEncipher(byte* in, byte* out)
 
 /******************************************************************************/
 
-void DES::tdesCbcDecipher(byte* in, byte* out)
+void DES::tdesCbcDecipher(uint8_t* in, uint8_t* out)
 {
 #if defined(DES_PRINT)
 	printf_P(PSTR("\n"));
@@ -574,13 +574,13 @@ void DES::tdesCbcDecipher(byte* in, byte* out)
 		}
 	}
 #if defined(DES_PRINT)
-	printArray((byte*)out, (bool)true);
+	printArray((uint8_t*)out, (bool)true);
 #endif
 }
 
 /******************************************************************************/
 
-void DES::printArray(byte output[], bool p_pad)
+void DES::printArray(uint8_t output[], bool p_pad)
 {
 	uint8_t i, j;
 	uint8_t loops = size / 8;
@@ -597,7 +597,7 @@ void DES::printArray(byte output[], bool p_pad)
 
 /******************************************************************************/
 
-void DES::printArray(byte output[], int sizel)
+void DES::printArray(uint8_t output[], int sizel)
 {
 	for (int i = 0; i < sizel; i++)
 	{
@@ -608,12 +608,12 @@ void DES::printArray(byte output[], int sizel)
 
 /******************************************************************************/
 
-void DES::do_3des_encrypt(byte* plain, int size_p, byte* cipher, const void* key, bool inc) {
+void DES::do_3des_encrypt(uint8_t* plain, int size_p, uint8_t* cipher, const void* key, bool inc) {
 	if (inc) {
 		iv_inc();
 	}
 	calc_size_n_pad(size_p);
-	byte plain_p[get_size()];
+	uint8_t plain_p[get_size()];
 	padPlaintext(plain, plain_p);
 	change_key(key);
 	tdesCbcEncipher(plain_p, cipher);
@@ -621,7 +621,7 @@ void DES::do_3des_encrypt(byte* plain, int size_p, byte* cipher, const void* key
 
 /******************************************************************************/
 
-void DES::do_3des_decrypt(byte* cipher, int size_c, byte* plain, const void* key, unsigned long long int ivl) {
+void DES::do_3des_decrypt(uint8_t* cipher, int size_c, uint8_t* plain, const void* key, unsigned long long int ivl) {
 	size = size_c;
 	change_key(key);
 	set_IV(ivl);
