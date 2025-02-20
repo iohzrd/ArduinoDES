@@ -423,10 +423,10 @@ void DES::decrypt_3des_cbc(uint8_t* ciphertext, size_t ciphertext_len, uint8_t* 
 		printf("Error: Ciphertext length must be a multiple of 8 bytes.\n");
 		return;
 	}
+	uint8_t block[8];
 	uint8_t prev_block[8];
 	memcpy(prev_block, iv, 8);
 	for (size_t i = 0; i < ciphertext_len; i += 8) {
-		uint8_t block[8];
 		tripleDecrypt(block, ciphertext + i, key);
 		xor_blocks(block, prev_block, 8);
 		memcpy(plaintext + i, block, 8);
@@ -441,10 +441,10 @@ void DES::encrypt_3des_cbc(uint8_t* plaintext, size_t plaintext_len, uint8_t* ke
 		printf("Error: Plaintext length must be a multiple of 8 bytes.\n");
 		return;
 	}
+	uint8_t block[8];
 	uint8_t prev_block[8];
 	memcpy(prev_block, iv, 8);
 	for (size_t i = 0; i < plaintext_len; i += 8) {
-		uint8_t block[8];
 		memcpy(block, plaintext + i, 8);
 		xor_blocks(block, prev_block, 8);
 		tripleEncrypt(ciphertext + i, block, key);
@@ -483,7 +483,8 @@ void DES::calc_size_n_pad(int p_size) {
 	int s_of_p = p_size - 1;
 	if (s_of_p % 8 == 0) {
 		size = s_of_p;
-	} else {
+	}
+	else {
 		size = s_of_p + (8 - (s_of_p % 8));
 	}
 	pad = size - s_of_p;
@@ -510,7 +511,8 @@ bool DES::CheckPad(uint8_t* in, int lsize) {
 				return false;
 			}
 		}
-	} else {
+	}
+	else {
 		return true;
 	}
 	return true;
@@ -534,7 +536,8 @@ void DES::tdesCbcEncipher(uint8_t* in, uint8_t* out)
 			if (i == 0)
 			{
 				in[i + xorIdx] = in[i + xorIdx] ^ iv[xorIdx];
-			} else
+			}
+			else
 			{
 				in[i + xorIdx] = in[i + xorIdx] ^ out[(i - 8) + xorIdx];
 			}
@@ -567,7 +570,8 @@ void DES::tdesCbcDecipher(uint8_t* in, uint8_t* out)
 			if (i == 0)
 			{
 				out[i + xorIdx] = out[i + xorIdx] ^ iv[xorIdx];
-			} else
+			}
+			else
 			{
 				out[i + xorIdx] = out[i + xorIdx] ^ in[(i - 8) + xorIdx];
 			}
